@@ -34,12 +34,12 @@ editProfileButton.addEventListener("click", () => {
 editProfileForm.addEventListener('submit', handleEditProfileSubmit);
 editProfileCloseButton.addEventListener("click", () => closeModal(editProfileModal));
 
-createCardButton.addEventListener("click", () => openModal(createCardModal));
-createCardForm.addEventListener('submit', handleAddCardSubmit);
-createCardCloseButton.addEventListener("click", () => {
+createCardButton.addEventListener("click", () => { 
   createCardForm.reset();
-  closeModal(createCardModal)
+  openModal(createCardModal);
 });
+createCardForm.addEventListener('submit', handleAddCardSubmit);
+createCardCloseButton.addEventListener("click", () => closeModal(createCardModal));
 
 zoomImageCloseButton.addEventListener("click", () => closeModal(zoomImageModal));
 
