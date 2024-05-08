@@ -1,5 +1,6 @@
 import '../pages/index.css';
-import { initialCards, createCard, deleteCard, likeCard } from './cards';
+import { initialCards } from './cards.js';
+import { createCard, deleteCard, likeCard } from './card.js';
 import { openModal, closeModal } from "./modal.js";
 
 const editProfileButton = document.querySelector(".profile__edit-button");
