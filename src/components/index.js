@@ -2,6 +2,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { createCard, deleteCard, likeCard } from './card.js';
 import { openModal, closeModal } from "./modal.js";
+import { validationConfig, enableValidation, clearValidation } from "./validation.js";
 
 const editProfileButton = document.querySelector(".profile__edit-button");
 const editProfileModal = document.querySelector(".popup_type_edit");
@@ -30,6 +31,7 @@ editProfileButton.addEventListener("click", () => {
   openModal(editProfileModal)
   editProfileName.value = profileName.textContent;
   editProfileDescription.value = profileDescription.textContent;
+  clearValidation(editProfileForm, validationConfig);
 });
 editProfileForm.addEventListener('submit', handleEditProfileSubmit);
 editProfileCloseButton.addEventListener("click", () => closeModal(editProfileModal));
@@ -37,6 +39,7 @@ editProfileCloseButton.addEventListener("click", () => closeModal(editProfileMod
 createCardButton.addEventListener("click", () => { 
   createCardForm.reset();
   openModal(createCardModal);
+  clearValidation(createCardForm, validationConfig);
 });
 createCardForm.addEventListener('submit', handleAddCardSubmit);
 createCardCloseButton.addEventListener("click", () => closeModal(createCardModal));
@@ -77,3 +80,4 @@ function displayCards(cardsArray) {
 
 displayCards(initialCards);
 
+enableValidation(validationConfig);
