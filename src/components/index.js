@@ -3,7 +3,7 @@ import { initialCards } from './cards.js';
 import { createCard, deleteCard, likeCard } from './card.js';
 import { openModal, closeModal } from "./modal.js";
 import { validationConfig, enableValidation, clearValidation } from "./validation.js";
-import { getInitialCards, getUserInfo, editProfileData } from "./api.js";
+import { getInitialCards, getUserInfo, editProfileData, createCardOnServer } from "./api.js";
 
 const editProfileButton = document.querySelector(".profile__edit-button");
 const editProfileModal = document.querySelector(".popup_type_edit");
@@ -50,7 +50,7 @@ zoomImageCloseButton.addEventListener("click", () => closeModal(zoomImageModal))
 
 function handleEditProfileSubmit(evt) {
   evt.preventDefault();
-  new Promise(editProfileData(editProfileName.value, editProfileDescription.value))
+  editProfileData(editProfileName.value, editProfileDescription.value)
   .then((ProfileData) => {
     profileName.textContent = ProfileData.name;
     profileDescription.textContent = ProfileData.about;
@@ -61,11 +61,11 @@ function handleEditProfileSubmit(evt) {
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
-  const cardData = {
-    name: createCardName.value,
-    link: createCardLink.value,
-  };
-  placesList.prepend(createCard(cardData, deleteCard, likeCard, zoomImage));
+  createCardOnServer(createCardName.value, createCardLink.value)
+  .then((cardData) => {
+    placesList.prepend(createCard(cardData, deleteCard, likeCard, zoomImage));
+  })
+  .catch((err) => console.log(err));
   createCardForm.reset();
   closeModal(createCardModal);
 }

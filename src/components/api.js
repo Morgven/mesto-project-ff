@@ -42,4 +42,44 @@ const editProfileData = (profileName, profileDescription) => {
     .catch((err) => console.log(err));
 };
 
-export { getInitialCards, getUserInfo, editProfileData };
+const createCardOnServer = (cardName, cardLink) => {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: "POST",
+    headers: config.headers,
+    body: JSON.stringify({
+      name: cardName,
+      link: cardLink,
+    }),
+  })
+    .then((res) => checkResult(res))
+    .catch((err) => console.log(err));
+};
+
+const deleteCardOnServer = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  })
+    .then((res) => checkResult(res))
+    .catch((err) => console.log(err));
+};
+
+const putLike = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: config.headers,
+  })
+    .then((res) => checkResult(res))
+    .catch((err) => console.log(err));
+};
+
+const deleteLike = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  })
+    .then((res) => checkResult(res))
+    .catch((err) => console.log(err));
+};
+
+export { getInitialCards, getUserInfo, editProfileData, createCardOnServer, deleteCardOnServer, putLike, deleteLike };
