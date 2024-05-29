@@ -24,6 +24,10 @@
   border: 1px solid rgba(0,0,0,.2);
   border-radius: 2px;
   color: rgba(0,0,0,.2);
+}
+
+.popup__button_disabled:hover {
+  background-color: #fff;
   cursor: default;
 }
 

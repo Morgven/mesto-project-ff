@@ -82,4 +82,16 @@ const deleteLike = (cardId) => {
     .catch((err) => console.log(err));
 };
 
-export { getInitialCards, getUserInfo, editProfileData, createCardOnServer, deleteCardOnServer, putLike, deleteLike };
+const editProfileAvatar = (profileAvatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: profileAvatar,
+    }),
+  })
+    .then((res) => checkResult(res))
+    .catch((err) => console.log(err));
+};
+
+export { getInitialCards, getUserInfo, editProfileData, createCardOnServer, deleteCardOnServer, putLike, deleteLike, editProfileAvatar };
