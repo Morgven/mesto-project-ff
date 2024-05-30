@@ -94,4 +94,13 @@ const editProfileAvatar = (profileAvatar) => {
     .catch((err) => console.log(err));
 };
 
-export { getInitialCards, getUserInfo, editProfileData, createCardOnServer, deleteCardOnServer, putLike, deleteLike, editProfileAvatar };
+export {
+  getInitialCards,
+  getUserInfo,
+  editProfileData,
+  createCardOnServer,
+  deleteCardOnServer,
+  putLike,
+  deleteLike,
+  editProfileAvatar,
+};

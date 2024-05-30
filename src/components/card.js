@@ -1,8 +1,12 @@
-import { deleteCardOnServer, putLike, deleteLike } from "./api.js";
-
 const cardTemplate = document.querySelector("#card-template").content;
 
-function createCard(cardData, deleteCard, likeCard, zoomImage, userId, handleLikeCard) {
+function createCard(
+  cardData,
+  zoomImage,
+  userId,
+  handleLikeCard,
+  handleDeleteCard
+) {
   const cardElement = cardTemplate
     .querySelector(".places__item.card")
     .cloneNode(true);
@@ -19,7 +23,7 @@ function createCard(cardData, deleteCard, likeCard, zoomImage, userId, handleLik
 
   if (cardData.owner["_id"] === userId) {
     buttonDelete.addEventListener("click", () =>
-      deleteCard(cardElement, cardData._id)
+      handleDeleteCard(cardElement, cardData._id)
     );
   } else {
     buttonDelete.remove();
@@ -29,21 +33,17 @@ function createCard(cardData, deleteCard, likeCard, zoomImage, userId, handleLik
     buttonLike.classList.add("card__like-button_is-active");
   }
 
-  buttonLike.addEventListener('click', () => handleLikeCard(buttonLike, buttonLikeCount, cardData._id))
+  buttonLike.addEventListener("click", () =>
+    handleLikeCard(buttonLike, buttonLikeCount, cardData._id)
+  );
 
   cardImage.addEventListener("click", () => zoomImage(cardData));
 
   return cardElement;
 }
 
-function deleteCard(cardElement, cardId) {
-  deleteCardOnServer(cardId)
-    .then(() => {
-      cardElement.remove();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+function deleteCard(cardElement) {
+  cardElement.remove();
 }
 
 function likeCard(buttonLike, buttonLikeCount, newCardData) {
