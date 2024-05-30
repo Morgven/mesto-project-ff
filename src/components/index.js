@@ -3,7 +3,7 @@ import { initialCards } from './cards.js';
 import { createCard, deleteCard, likeCard } from './card.js';
 import { openModal, closeModal } from "./modal.js";
 import { validationConfig, enableValidation, clearValidation } from "./validation.js";
-import { getInitialCards, getUserInfo, editProfileData, createCardOnServer, editProfileAvatar } from "./api.js";
+import { getInitialCards, getUserInfo, editProfileData, createCardOnServer, editProfileAvatar, deleteCardOnServer, putLike, deleteLike } from "./api.js";
 
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const moldalEditProfile = document.querySelector(".popup_type_edit");
@@ -93,12 +93,24 @@ function handleAddCardSubmit(evt) {
   buttonSubmit.textContent = 'Сохранение...';
   createCardOnServer(nameCreateCard.value, linkCreateCard.value)
   .then((cardData) => {
-    placesList.prepend(createCard(cardData, deleteCard, likeCard, zoomImage));
+    placesList.prepend(createCard(cardData, deleteCard, likeCard, zoomImage, userId, handleLikeCard));
     formCreateCard.reset();
     closeModal(modalCreateCard);
   })
   .catch((err) => console.log(err))
   .finally(() => buttonSubmit.textContent = 'Сохранить');
+}
+
+function handleLikeCard(buttonLike, buttonLikeCount, cardId) {
+  if (buttonLike.classList.contains("card__like-button_is-active")) {
+    deleteLike(cardId)
+      .then((newCardData) => {likeCard(buttonLike, buttonLikeCount, newCardData);})
+      .catch((err) => {console.log(err);});
+  } else {
+    putLike(cardId)
+      .then((newCardData) => {likeCard(buttonLike, buttonLikeCount, newCardData);})
+      .catch((err) => {console.log(err);});
+  }
 }
 
 function zoomImage(image) {
@@ -119,15 +131,16 @@ function zoomImage(image) {
 
 enableValidation(validationConfig);
 
+let userId;
 Promise.all([getUserInfo(), getInitialCards()])
     .then( function displayServerCardsAndUserInfo([userInfo, cardsArray]) {
-      const userId = userInfo._id;
+      userId = userInfo._id;
       profileName.textContent = userInfo.name;
       profileDescription.textContent = userInfo.about;
       profileImage.style.backgroundImage = `url('${userInfo.avatar}')`;
       cardsArray.forEach(function (cardData) {
         placesList.append(
-          createCard(cardData, deleteCard, likeCard, zoomImage, userId)
+          createCard(cardData, deleteCard, likeCard, zoomImage, userId, handleLikeCard)
         );
       })
     })

@@ -2,54 +2,34 @@ import { deleteCardOnServer, putLike, deleteLike } from "./api.js";
 
 const cardTemplate = document.querySelector("#card-template").content;
 
-function createCard(cardData, deleteCard, likeCard, zoomImage, userId) {
+function createCard(cardData, deleteCard, likeCard, zoomImage, userId, handleLikeCard) {
   const cardElement = cardTemplate
     .querySelector(".places__item.card")
     .cloneNode(true);
   const cardTitle = cardElement.querySelector(".card__title");
   const cardImage = cardElement.querySelector(".card__image");
-  const likeButton = cardElement.querySelector(".card__like-button");
-  const likeButtonCount = cardElement.querySelector(".card__like-counter");
-  const deleteButton = cardElement.querySelector(".card__delete-button");
+  const buttonLike = cardElement.querySelector(".card__like-button");
+  const buttonLikeCount = cardElement.querySelector(".card__like-counter");
+  const buttonDelete = cardElement.querySelector(".card__delete-button");
 
   cardTitle.textContent = cardData.name;
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
-  likeButtonCount.textContent = cardData.likes.length;
+  buttonLikeCount.textContent = cardData.likes.length;
 
   if (cardData.owner["_id"] === userId) {
-    deleteButton.addEventListener("click", () =>
+    buttonDelete.addEventListener("click", () =>
       deleteCard(cardElement, cardData._id)
     );
   } else {
-    deleteButton.remove();
+    buttonDelete.remove();
   }
 
   if (cardData.likes.some((like) => like._id === userId)) {
-    likeButton.classList.add("card__like-button_is-active");
+    buttonLike.classList.add("card__like-button_is-active");
   }
 
-  likeButton.addEventListener("click", () => {
-    if (likeButton.classList.contains("card__like-button_is-active")) {
-      deleteLike(cardData._id)
-        .then((newCardData) => {
-          likeButtonCount.textContent = newCardData.likes.length;
-          likeCard(likeButton);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      putLike(cardData._id)
-        .then((newCardData) => {
-          likeButtonCount.textContent = newCardData.likes.length;
-          likeCard(likeButton);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  });
+  buttonLike.addEventListener('click', () => handleLikeCard(buttonLike, buttonLikeCount, cardData._id))
 
   cardImage.addEventListener("click", () => zoomImage(cardData));
 
@@ -66,8 +46,9 @@ function deleteCard(cardElement, cardId) {
     });
 }
 
-function likeCard(likeButton) {
-  likeButton.classList.toggle("card__like-button_is-active");
+function likeCard(buttonLike, buttonLikeCount, newCardData) {
+  buttonLike.classList.toggle("card__like-button_is-active");
+  buttonLikeCount.textContent = newCardData.likes.length;
 }
 
 export { createCard, deleteCard, likeCard };
