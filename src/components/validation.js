@@ -89,7 +89,7 @@ function clearValidation(formElement, config) {
   });
 
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
-  toggleButtonState(inputList, buttonElement, config.inactiveButtonClass);
+  toggleButtonState(inputList, buttonElement, config);
 }
 
 export { validationConfig, enableValidation, clearValidation };

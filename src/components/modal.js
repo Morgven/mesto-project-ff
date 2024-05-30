@@ -1,8 +1,5 @@
 function openModal(modal) {
-  modal.classList.add("popup_is-animated");
-  setTimeout(() => {
-    modal.classList.add("popup_is-opened");
-  }, 0);
+  modal.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeWithEsc);
   modal.addEventListener("click", closeWithOverlay);
 }

@@ -5,107 +5,107 @@ import { openModal, closeModal } from "./modal.js";
 import { validationConfig, enableValidation, clearValidation } from "./validation.js";
 import { getInitialCards, getUserInfo, editProfileData, createCardOnServer, editProfileAvatar } from "./api.js";
 
-const editProfileButton = document.querySelector(".profile__edit-button");
-const editProfileModal = document.querySelector(".popup_type_edit");
-const editProfileCloseButton = editProfileModal.querySelector(".popup__close");
-const editProfileForm = editProfileModal.querySelector(".popup__form");
-const editProfileName = editProfileForm.querySelector(".popup__input_type_name");
-const editProfileDescription = editProfileForm.querySelector(".popup__input_type_description");
+const buttonEditProfile = document.querySelector(".profile__edit-button");
+const moldalEditProfile = document.querySelector(".popup_type_edit");
+const buttonCloseEditProfile = moldalEditProfile.querySelector(".popup__close");
+const formEditProfile = moldalEditProfile.querySelector(".popup__form");
+const nameEditProfile = formEditProfile.querySelector(".popup__input_type_name");
+const descriptionEditProfile = formEditProfile.querySelector(".popup__input_type_description");
 const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
 const profileImage = document.querySelector('.profile__image');
-const editProfileImageModal = document.querySelector(".popup_type_edit-avatar");
-const editProfileImageCloseButton = editProfileImageModal.querySelector(".popup__close");
-const editProfileImageForm = editProfileImageModal.querySelector(".popup__form");
-const editProfileAvatarInput = editProfileImageForm.querySelector(".popup__input_type_avatar-url");
+const modalEditProfileImage = document.querySelector(".popup_type_edit-avatar");
+const buttonCloseEditProfileImage = modalEditProfileImage.querySelector(".popup__close");
+const formEditProfileImage = modalEditProfileImage.querySelector(".popup__form");
+const avatarInput = formEditProfileImage.querySelector(".popup__input_type_avatar-url");
 
-const createCardButton = document.querySelector(".profile__add-button");
-const createCardModal = document.querySelector(".popup_type_new-card");
-const createCardCloseButton = createCardModal.querySelector(".popup__close");
-const createCardForm = createCardModal.querySelector(".popup__form");
-const createCardName = createCardForm.querySelector(".popup__input_type_card-name");
-const createCardLink = createCardForm.querySelector(".popup__input_type_url");
+const buttonCreateCard = document.querySelector(".profile__add-button");
+const modalCreateCard = document.querySelector(".popup_type_new-card");
+const buttonCloseCreateCard = modalCreateCard.querySelector(".popup__close");
+const formCreateCard = modalCreateCard.querySelector(".popup__form");
+const nameCreateCard = formCreateCard.querySelector(".popup__input_type_card-name");
+const linkCreateCard = formCreateCard.querySelector(".popup__input_type_url");
 
-const zoomImageModal = document.querySelector(".popup_type_image");
-const zoomImageSource = document.querySelector(".popup__image");
-const zoomImageCaption = document.querySelector(".popup__caption");
-const zoomImageCloseButton = zoomImageModal.querySelector(".popup__close");
+const modalZoomImage = document.querySelector(".popup_type_image");
+const sourceZoomImage = document.querySelector(".popup__image");
+const captionZoomImage = document.querySelector(".popup__caption");
+const buttonCloseZoomImage = modalZoomImage.querySelector(".popup__close");
 
 const buttonSubmit = document.querySelector(".popup__button");
 const placesList = document.querySelector(".places__list");
 
-editProfileButton.addEventListener("click", () => { 
-  openModal(editProfileModal)
-  editProfileName.value = profileName.textContent;
-  editProfileDescription.value = profileDescription.textContent;
-  clearValidation(editProfileForm, validationConfig);
+buttonEditProfile.addEventListener("click", () => { 
+  openModal(moldalEditProfile)
+  nameEditProfile.value = profileName.textContent;
+  descriptionEditProfile.value = profileDescription.textContent;
+  clearValidation(formEditProfile, validationConfig);
 });
-editProfileForm.addEventListener('submit', handleEditProfileSubmit);
-editProfileCloseButton.addEventListener("click", () => closeModal(editProfileModal));
+formEditProfile.addEventListener('submit', handleEditProfileSubmit);
+buttonCloseEditProfile.addEventListener("click", () => closeModal(moldalEditProfile));
 
 profileImage.addEventListener("click", () => {
-  editProfileImageForm.reset();
-  openModal(editProfileImageModal);
-  clearValidation(editProfileImageForm, validationConfig);
+  formEditProfileImage.reset();
+  openModal(modalEditProfileImage);
+  clearValidation(formEditProfileImage, validationConfig);
 });
-editProfileImageForm.addEventListener('submit', handleEditProfileImageSubmit);
-editProfileImageCloseButton.addEventListener("click", () => closeModal(editProfileImageModal));
+formEditProfileImage.addEventListener('submit', handleEditProfileImageSubmit);
+buttonCloseEditProfileImage.addEventListener("click", () => closeModal(modalEditProfileImage));
 
-createCardButton.addEventListener("click", () => { 
-  createCardForm.reset();
-  openModal(createCardModal);
-  clearValidation(createCardForm, validationConfig);
+buttonCreateCard.addEventListener("click", () => { 
+  formCreateCard.reset();
+  openModal(modalCreateCard);
+  clearValidation(formCreateCard, validationConfig);
 });
-createCardForm.addEventListener('submit', handleAddCardSubmit);
-createCardCloseButton.addEventListener("click", () => closeModal(createCardModal));
+formCreateCard.addEventListener('submit', handleAddCardSubmit);
+buttonCloseCreateCard.addEventListener("click", () => closeModal(modalCreateCard));
 
-zoomImageCloseButton.addEventListener("click", () => closeModal(zoomImageModal));
+buttonCloseZoomImage.addEventListener("click", () => closeModal(modalZoomImage));
 
 function handleEditProfileSubmit(evt) {
   evt.preventDefault();
   buttonSubmit.textContent = 'Сохранение...';
-  editProfileData(editProfileName.value, editProfileDescription.value)
+  editProfileData(nameEditProfile.value, descriptionEditProfile.value)
   .then((profileData) => {
     profileName.textContent = profileData.name;
     profileDescription.textContent = profileData.about;
+    closeModal(moldalEditProfile);
   })
   .catch((err) => console.log(err))
   .finally(() => buttonSubmit.textContent = 'Сохранить');
-  closeModal(editProfileModal);
 }
 
 function handleEditProfileImageSubmit(evt) {
   evt.preventDefault();
   buttonSubmit.textContent = 'Сохранение...';
-  editProfileAvatar(editProfileAvatarInput.value)
+  editProfileAvatar(avatarInput.value)
   .then((newProfileImage) => {
     profileImage.style.backgroundImage = `url('${newProfileImage}')`;
+    formEditProfileImage.reset();
+    closeModal(modalEditProfileImage);
   })
   .catch((err) => console.log(err))
   .finally(() => buttonSubmit.textContent = 'Сохранить');
-  editProfileImageForm.reset();
-  closeModal(editProfileImageModal);
 }
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
   buttonSubmit.textContent = 'Сохранение...';
-  createCardOnServer(createCardName.value, createCardLink.value)
+  createCardOnServer(nameCreateCard.value, linkCreateCard.value)
   .then((cardData) => {
     placesList.prepend(createCard(cardData, deleteCard, likeCard, zoomImage));
+    formCreateCard.reset();
+    closeModal(modalCreateCard);
   })
   .catch((err) => console.log(err))
   .finally(() => buttonSubmit.textContent = 'Сохранить');
-  createCardForm.reset();
-  closeModal(createCardModal);
 }
 
 function zoomImage(image) {
-  zoomImageCaption.textContent = image.name;
-  zoomImageSource.src = image.link;
-  zoomImageSource.alt = image.name;
-  openModal(zoomImageModal);
+  captionZoomImage.textContent = image.name;
+  sourceZoomImage.src = image.link;
+  sourceZoomImage.alt = image.name;
+  openModal(modalZoomImage);
 }
 
 // function displayLocalCards(cardsArray) {
